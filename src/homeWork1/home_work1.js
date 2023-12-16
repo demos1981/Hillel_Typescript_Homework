@@ -66,7 +66,10 @@ var Group = /** @class */ (function () {
         this._students.push(student);
     };
     Group.prototype.showPerformance = function () {
-        var sortedStudents = this.students.sort(function (a, b) { return b.getPerformanceRating() - a.getPerformanceRating(); });
+        var sortedStudents = this.students.sort(function (a, b) {
+            return b.getPerformanceRating() - a.getPerformanceRating();
+        } //анотация параметров const
+        );
         return sortedStudents;
     };
     return Group;
@@ -107,7 +110,8 @@ var Student = /** @class */ (function () {
         var gradeValues = Object.values(this.grades);
         if (gradeValues.length === 0)
             return 0;
-        var averageGrade = gradeValues.reduce(function (sum, grade) { return sum + grade; }, 0) / gradeValues.length;
+        var averageGrade = gradeValues.reduce(function (sum, grade) { return sum + grade; }, 0) /
+            gradeValues.length;
         var attendancePercentage = (this.attendance.filter(function (present) { return present; }).length /
             this.attendance.length) *
             100;
