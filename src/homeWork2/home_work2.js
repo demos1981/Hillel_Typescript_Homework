@@ -112,11 +112,44 @@ var Level = /** @class */ (function () {
 var Group = /** @class */ (function () {
     function Group(directionName, levelName) {
         this._students = []; // Modify the array so that it has a valid toSorted method*
-        this.directionName = directionName;
-        this.levelName = levelName;
+        this._area = directionName;
+        this._status = levelName;
     }
+    Object.defineProperty(Group.prototype, "area", {
+        get: function () {
+            return this._area;
+        },
+        enumerable: false,
+        configurable: true
+    });
+    Object.defineProperty(Group.prototype, "status", {
+        get: function () {
+            return this._status;
+        },
+        enumerable: false,
+        configurable: true
+    });
+    Object.defineProperty(Group.prototype, "students", {
+        get: function () {
+            return this._students;
+        },
+        enumerable: false,
+        configurable: true
+    });
+    Group.prototype.addStudent = function (student) {
+        this._students.push(student);
+    };
+    Group.prototype.removeStudent = function (student) {
+        var index = this._students.indexOf(student);
+        if (index > -1) {
+            this._students.splice(index, 1);
+        }
+    };
+    Group.prototype.setStatus = function (status) {
+        this._status = status;
+    };
     Group.prototype.showPerformance = function () {
-        var sortedStudents = this._students.toSorted(function (a, b) { return b.getPerformanceRating() - a.getPerformanceRating(); });
+        var sortedStudents = this._students.sort(function (a, b) { return b.getPerformanceRating() - a.getPerformanceRating(); });
         return sortedStudents;
     };
     return Group;
@@ -135,7 +168,7 @@ var Student = /** @class */ (function () {
         },
         set: function (value) {
             var _a;
-            _a = value.split(" "), this._lastName = _a[0], this._firstName = _a[1];
+            _a = value.split(' '), this._lastName = _a[0], this._firstName = _a[1];
         },
         enumerable: false,
         configurable: true
@@ -147,13 +180,15 @@ var Student = /** @class */ (function () {
         enumerable: false,
         configurable: true
     });
+    Student.prototype.setGrade = function (workName, mark) {
+        this._grades[workName] = mark;
+    };
     Student.prototype.getPerformanceRating = function () {
         var gradeValues = Object.values(this._grades);
         if (!gradeValues.length)
             return 0;
         var averageGrade = gradeValues.reduce(function (sum, grade) { return sum + grade; }, 0) / gradeValues.length;
-        var attendancePercentage = (this._visits.filter(function (present) { return present; }).length / this._visits.length) *
-            100;
+        var attendancePercentage = (this._visits.filter(function (present) { return present; }).length / this._visits.length) * 100;
         return (averageGrade + attendancePercentage) / 2;
     };
     return Student;

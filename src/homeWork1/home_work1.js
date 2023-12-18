@@ -1,3 +1,6 @@
+//Додаю JS код, який потрібно перевести у TS та додати анотацію типів до примітивів. Не чіпайте обʼєкти та будь що, чого ми ще не розглядали на занятті.
+//Замість цього ви можете зараз використовувати any, поки ми не знаємо кращого вибору.
+//Перевіряйте код, там є речі, які потрібно додати до класів, не тільки типи. Вам треба зробити рефакторинг, будьте уважні.
 var School = /** @class */ (function () {
     function School() {
         this.directions = [];
@@ -66,9 +69,7 @@ var Group = /** @class */ (function () {
         this._students.push(student);
     };
     Group.prototype.showPerformance = function () {
-        var sortedStudents = this.students.sort(function (a, b) {
-            return b.getPerformanceRating() - a.getPerformanceRating();
-        } //анотация параметров const
+        var sortedStudents = this.students.sort(function (a, b) { return b.getPerformanceRating() - a.getPerformanceRating(); } //анотация параметров const
         );
         return sortedStudents;
     };
@@ -88,7 +89,7 @@ var Student = /** @class */ (function () {
         },
         set: function (value) {
             var _a;
-            _a = value.split(" "), this.lastName = _a[0], this.firstName = _a[1];
+            _a = value.split(' '), this.lastName = _a[0], this.firstName = _a[1];
         },
         enumerable: false,
         configurable: true
@@ -110,11 +111,8 @@ var Student = /** @class */ (function () {
         var gradeValues = Object.values(this.grades);
         if (gradeValues.length === 0)
             return 0;
-        var averageGrade = gradeValues.reduce(function (sum, grade) { return sum + grade; }, 0) /
-            gradeValues.length;
-        var attendancePercentage = (this.attendance.filter(function (present) { return present; }).length /
-            this.attendance.length) *
-            100;
+        var averageGrade = gradeValues.reduce(function (sum, grade) { return sum + grade; }, 0) / gradeValues.length;
+        var attendancePercentage = (this.attendance.filter(function (present) { return present; }).length / this.attendance.length) * 100;
         return (averageGrade + attendancePercentage) / 2;
     };
     return Student;
