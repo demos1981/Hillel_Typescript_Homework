@@ -149,7 +149,7 @@ var Group = /** @class */ (function () {
         this._status = status;
     };
     Group.prototype.showPerformance = function () {
-        var sortedStudents = this._students.sort(function (a, b) { return b.getPerformanceRating() - a.getPerformanceRating(); });
+        var sortedStudents = this._students.toSorted(function (a, b) { return b.getPerformanceRating() - a.getPerformanceRating(); });
         return sortedStudents;
     };
     return Group;
@@ -181,7 +181,10 @@ var Student = /** @class */ (function () {
         configurable: true
     });
     Student.prototype.setGrade = function (workName, mark) {
-        this._grades[workName] = mark;
+        this._grades.push(workName, mark);
+    };
+    Student.prototype.setVisit = function (lesson, present) {
+        this._visits.push(present);
     };
     Student.prototype.getPerformanceRating = function () {
         var gradeValues = Object.values(this._grades);

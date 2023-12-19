@@ -152,7 +152,7 @@ class Group {
   }
 
   showPerformance(): Student[] {
-    const sortedStudents = this._students.sort(
+    const sortedStudents = this._students.toSorted(
       (a: Student, b: Student) => b.getPerformanceRating() - a.getPerformanceRating()
     );
     return sortedStudents;
@@ -186,11 +186,15 @@ class Student {
     return new Date().getFullYear() - this._birthYear;
   }
 
-  setGrade(workName: string[], mark: number[]): void {
-    this._grades[workName] = mark;
+  setGrade(workName: string, mark: number): void {
+    this._grades.push(workName, mark);
   }
 
-  getPerformanceRating() {
+  setVisit(lesson: string, present: boolean): void {
+    this._visits.push(present);
+  }
+
+  getPerformanceRating(): number {
     const gradeValues = Object.values(this._grades);
 
     if (!gradeValues.length) return 0;
