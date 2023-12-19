@@ -152,7 +152,7 @@ class Group {
   }
 
   showPerformance(): Student[] {
-    const sortedStudents = this._students.toSorted(
+    const sortedStudents: Student[] = this._students.toSorted(
       (a: Student, b: Student) => b.getPerformanceRating() - a.getPerformanceRating()
     );
     return sortedStudents;
@@ -195,12 +195,14 @@ class Student {
   }
 
   getPerformanceRating(): number {
-    const gradeValues = Object.values(this._grades);
+    const gradeValues: any = Object.values(this._grades);
 
     if (!gradeValues.length) return 0;
 
-    const averageGrade = gradeValues.reduce((sum, grade) => sum + grade, 0) / gradeValues.length;
-    const attendancePercentage = (this._visits.filter(present => present).length / this._visits.length) * 100;
+    const averageGrade: number =
+      gradeValues.reduce((sum: number, grade: number) => sum + grade, 0) / gradeValues.length;
+    const attendancePercentage =
+      (this._visits.filter((present: boolean) => present).length / this._visits.length) * 100;
 
     return (averageGrade + attendancePercentage) / 2;
   }
