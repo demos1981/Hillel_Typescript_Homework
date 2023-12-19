@@ -1,3 +1,8 @@
+//Додаю JS код, який потрібно перевести у TS та додати анотацію типів до примітивів. Не чіпайте обʼєкти та будь що, чого ми ще не розглядали на занятті.
+//Замість цього ви можете зараз використовувати any, поки ми не знаємо кращого вибору.
+
+//Перевіряйте код, там є речі, які потрібно додати до класів, не тільки типи. Вам треба зробити рефакторинг, будьте уважні.
+
 class School {
   directions: string[] = [];
 
@@ -66,12 +71,11 @@ class Group {
 
   showPerformance(): Student[] {
     const sortedStudents = this.students.sort(
-      (a: Student, b: Student) =>
-        b.getPerformanceRating() - a.getPerformanceRating() //анотация параметров const
+      (a: Student, b: Student) => b.getPerformanceRating() - a.getPerformanceRating() //анотация параметров const
     );
 
     return sortedStudents;
-  }               
+  }
 }
 
 class Student {
@@ -92,7 +96,7 @@ class Student {
   }
 
   set fullName(value: string) {
-    [this.lastName, this.firstName] = value.split(" ");
+    [this.lastName, this.firstName] = value.split(' ');
   }
 
   get age(): number {
@@ -112,14 +116,10 @@ class Student {
 
     if (gradeValues.length === 0) return 0;
 
-    const averageGrade =
-      gradeValues.reduce((sum: number, grade: number) => sum + grade, 0) /
-      gradeValues.length;
+    const averageGrade = gradeValues.reduce((sum: number, grade: number) => sum + grade, 0) / gradeValues.length;
 
     const attendancePercentage =
-      (this.attendance.filter((present: string) => present).length /
-        this.attendance.length) *
-      100;
+      (this.attendance.filter((present: string) => present).length / this.attendance.length) * 100;
 
     return (averageGrade + attendancePercentage) / 2;
   }
