@@ -22,100 +22,185 @@
 
 //Попередньо найняті співробітники отримують зарплату за допомогою зовнішніх оплат, Співробітники (тільки активні) - за допомогою внутрішніх.
 
-type Person = {
-  //персонал компанії
+
+// Енуми
+enum PaymentMethod {
+  Internal = 'internal',
+  External = 'external',
+}
+
+enum EmployeeStatus {
+  Active = 'active',
+  Inactive = 'inactive',
+  UnpaidLeave = 'unpaidLeave',
+}
+
+// Тіпи
+type Personal = {
   name: string;
-  isPreHired: boolean; // Вказує, чи була особа раніше прийнята на роботу
-  isActive: boolean; // Вказує, чи активна особа на даний момент
-  paymentMethod: 'external' | 'internal'; // Вказує спосіб оплати
+  surname: string;
 };
 
-// Type бюджету, що представляє бюджет відділу
-type Budget = {
+type Budgets = {
   debit: number;
   credit: number;
 };
 
-// Клас відділу з властивостями імені, доменного імені, співробітників і бюджету
-class Department {
+// Класи
+class PreHiredEmployee {
+  //Клас попередньо найнятий співробітник
+  name: Personal;
+  surname: Personal;
+  salary: number;
+  bankAccountNumber: string;
+
+  constructor(name: Personal, surname: Personal, salary: number, bankAccountNumber: string) {
+    this.name = name;
+    this.surname = surname;
+    this.salary = salary;
+    this.bankAccountNumber = bankAccountNumber;
+  }
+}
+
+class Employee {
+  //Клас співробітник
+  name: Personal;
+  surname: Personal;
+  paymentMethod: PaymentMethod;
+  salary: number;
+  status: EmployeeStatus;
+  department: Departments;
+
+  constructor(
+    name: Personal,
+    surname: Personal,
+    paymentMethod: PaymentMethod,
+    salary: number,
+    status: EmployeeStatus,
+    department: Departments
+  ) {
+    this.name = name;
+    this.surname = surname;
+    this.paymentMethod = paymentMethod;
+    this.salary = salary;
+    this.status = status;
+    this.department = department;
+  }
+}
+
+class Departments {
+  //Клас департамент
   name: string;
   domainName: string;
-  employees: Person[];
-  budget: Budget;
+  employees: Employee[];
+  budget: Budgets;
 
-  constructor(name: string, domainName: string, employees: Person[], budget: Budget) {
+  constructor(name: string, domainName: string, employees: Employee[], budget: Budgets) {
     this.name = name;
     this.domainName = domainName;
     this.employees = employees;
     this.budget = budget;
   }
 
-  // Метод розрахунку поточного балансу на основі бюджету
   calculateBalance(): number {
+    //розрахунок балансу
     return this.budget.debit - this.budget.credit;
   }
 
-  // Спосіб додавання нових співробітників у відділ, поновлення балансу
-  addEmployees(newEmployees: Person[]): void {
+  addEmployees(newEmployees: Employee[]): void {
+    //додавання співробітника
     this.employees.push(...newEmployees);
 
-    // Припускаючи, що кожен новий працівник додає постійні витрати, відповідно оновіть бюджет
-    const costPerEmployee = 5000;
+    const costPerEmployee = 5000; // додаємо баланс нового співробітника
     const additionalDebit = costPerEmployee * newEmployees.length;
 
-    this.budget.debit += additionalDebit;
+    this.budget.debit += additionalDebit; //додамо його в дебет
   }
 
-  // Спосіб обробки змін у статусі працівника
-  handleEmployeeStatusChange(employee: Person, isPreHired: boolean, removeFromPreviousDepartment: boolean): void {
-    if (isPreHired) {
-      // Якщо особа була попередньо прийнята на роботу, вирахувати з бюджету вартість попереднього найму
-      const preHireCost = 10000;
-      this.budget.debit -= preHireCost;
-    } else {
-      // Якщо особу вилучають з відділу, треба оновити бюджет відповідно
-      if (removeFromPreviousDepartment) {
-        const removalCost = 2000;
-        this.budget.debit -= removalCost;
-      }
+  handleEmployeeStatusChange(employee: Employee, removeFromPreviousDepartment: boolean): void {
+    if (removeFromPreviousDepartment) {
+      //якщо видаляємо з департменту
+      const removalCost = 2000; //видаляємо баланс та оновлюємо бюджет
+      this.budget.debit -= removalCost;
+    }
 
-      // Оновити список працівників
-      this.employees = this.employees.filter(e => e !== employee);
+    this.employees = this.employees.filter(e => e !== employee);
+  }
+}
+
+class Company {
+  // Клас компанія
+
+  name: string;
+  departments: Departments[];
+  preHiredPersonnel: PreHiredEmployee[];
+  allPersonnel: (Employee | PreHiredEmployee)[];
+
+  constructor(
+    name: string,
+    departments: Departments[],
+    preHiredPersonnel: PreHiredEmployee[],
+    allPersonnel: (Employee | PreHiredEmployee)[]
+  ) {
+    this.name = name;
+    this.departments = departments;
+    this.preHiredPersonnel = preHiredPersonnel;
+    this.allPersonnel = allPersonnel;
+  }
+
+  getAllPersonnel(): (Employee | PreHiredEmployee)[] {
+    //отримати усіх співробітників
+    return [...this.allPersonnel];
+  }
+}
+
+class Accounting extends Departments {
+  //класс бухгалтерія наслідується від департаменту
+  balance: number;
+  constructor(balance: number) {
+    super('Accounting', 'accounting.domain.com', [], { debit: 0, credit: 0 });//використовуємо батьківський конструктор
+    this.balance = balance;
+  }
+
+  takeOnBalance(entity: Employee | Departments): void {
+    //отримання балансу співробітника чи департаменту
+    if (entity instanceof Employee) {
+      console.log(`Taking employee ${entity.name} on the balance sheet.`);
+      this.budget.debit += entity.salary;
+    } else if (entity instanceof Departments) {
+      console.log(`Taking department ${entity.name} on the balance sheet.`);
+      this.budget.debit += entity.calculateBalance();
     }
   }
 
-  // Метод вирахування виплати заробітної плати працівникам
-  processSalaryPayments(): void {
-    this.employees.forEach(employee => {
-      if (employee.isActive) {
-        // Актуальні працівники отримують внутрішні виплати
-        if (employee.paymentMethod === 'internal') {
-          // Логіка внутрішнього платежу процесу
-          console.log(`Processing internal payment for ${employee.name}`);
-          // Оновлення бюджета тощо на основі внутрішньої логіки платежів
+  removeFromBalance(entity: Employee | Departments): void {
+    //видалення з балансу співробітника чи департаменту
+    if (entity instanceof Employee) {
+      console.log(`Removing employee ${entity.name} from the balance sheet.`);
+      this.budget.debit -= entity.salary;
+    } else if (entity instanceof Departments) {
+      console.log(`Removing department ${entity.name} from the balance sheet.`);
+      this.budget.debit -= entity.calculateBalance();
+    }
+  }
+
+  paySalaries(allPersonnel: (Employee | PreHiredEmployee)[]): void {
+    //виплата зарабітної плати співробітника або попередньо найнятого співробітника
+    allPersonnel.forEach(person => {
+      if (person instanceof Employee && person.status === EmployeeStatus.Active) {
+        //як-що співробітник має статус активний
+
+        if (person.paymentMethod === PaymentMethod.Internal) {
+          console.log(`Processing internal payment for ${person.name}`);
         }
-      } else {
+      } else if (person instanceof PreHiredEmployee) {
         // Раніше найнятий персонал отримує зовнішні виплати
-        if (employee.paymentMethod === 'external') {
-          //Логіка обробки зовнішніх платежів
-          console.log(`Processing external payment for previously hired ${employee.name}`);
-          //Оновлення бюджету тощо на основі зовнішньої логіки платежів
-        }
+        console.log(`Processing external payment for previously hired ${person.name}`);
       }
     });
   }
 }
 
-// Приклад використання:
-const engineeringDepartment = new Department(
-  'Engineering',
-  'engineering.domain.com',
-  [
-    { name: 'Alice', isPreHired: false, isActive: true, paymentMethod: 'internal' },
-    { name: 'Bob', isPreHired: true, isActive: false, paymentMethod: 'external' },
-  ],
-  { debit: 100000, credit: 80000 }
-);
 
-// Оформити виплату заробітної плати
-engineeringDepartment.processSalaryPayments();
+
+
