@@ -158,7 +158,7 @@ class Accounting extends Departments {
   //класс бухгалтерія наслідується від департаменту
   balance: number;
   constructor(balance: number) {
-    super('Accounting', 'accounting.domain.com', [], { debit: 0, credit: 0 });//використовуємо батьківський конструктор
+    super('Accounting', 'accounting.domain.com', [], { debit: 0, credit: 0 });//використовуємо батьківський конструктор 
     this.balance = balance;
   }
 
