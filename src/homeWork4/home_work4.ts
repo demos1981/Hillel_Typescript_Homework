@@ -1,6 +1,6 @@
 //задание1
 
-interface Calculator {
+interface ICalculator {
   result: number;
   add: (number: number) => void;
   subtract: (number: number) => void;
@@ -8,7 +8,7 @@ interface Calculator {
   divide: (number: number) => void;
 }
 
-function calculate(calculator: Calculator, operation: string, number: number): number | null {
+function calculate(calculator: ICalculator, operation: string, number: number): number | null {
   switch (operation) {
     case 'add':
       calculator.add(number);
@@ -30,7 +30,7 @@ function calculate(calculator: Calculator, operation: string, number: number): n
   return calculator.result;
 }
 
-const myCalculator: Calculator = {
+const myCalculator: ICalculator = {
   result: 10,
   add: function (number: number): void {
     this.result += number;
