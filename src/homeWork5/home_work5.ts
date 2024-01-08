@@ -3,6 +3,7 @@
 //У Square і Rectangle зі свого боку є ще додатковий метод print, який виводить рядок із формулою розрахунку площі.
 
 class Shape {
+  //базовий клас який має захищенні поля та базовий метод розрахунку calculateArea().
   protected readonly color: string;
   protected readonly name: string;
 
@@ -17,6 +18,7 @@ class Shape {
 }
 
 class Circle extends Shape {
+  //наслідується від базового класу Shape та маэ власне приватне поле radius
   private readonly radius: number;
 
   constructor(color: string, name: string, radius: number) {
@@ -29,7 +31,24 @@ class Circle extends Shape {
   }
 }
 
+class Triangle extends Shape {
+  //також наслідується від базового класу Shape.
+  private readonly base: number;
+  private readonly height: number;
+
+  constructor(color: string, base: number, height: number) {
+    super(color, 'Triangle');
+    this.base = base;
+    this.height = height;
+  }
+
+  public calculateArea(): number {
+    return 0.5 * this.base * this.height;
+  }
+}
+
 class Rectangle extends Shape {
+  //також наслідується від базового классу та має власні приватні поля та додатковий власний метод print()
   private readonly width: number;
   private readonly height: number;
 
@@ -49,22 +68,13 @@ class Rectangle extends Shape {
 }
 
 class Square extends Rectangle {
+  //повністю дублює клас Rectangle тож наслідується від нього, йому доступні обидва методи класу
   constructor(color: string, sideLength: number) {
     super(color, 'Square', sideLength, sideLength);
   }
 }
 
-class Triangle extends Shape {
-  private readonly base: number;
-  private readonly height: number;
 
-  constructor(color: string, base: number, height: number) {
-    super(color, 'Triangle');
-    this.base = base;
-    this.height = height;
-  }
 
-  public calculateArea(): number {
-    return 0.5 * this.base * this.height;
-  }
-}
+
+

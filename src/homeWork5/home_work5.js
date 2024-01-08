@@ -22,7 +22,7 @@ var Shape = /** @class */ (function () {
         this.name = name;
     }
     Shape.prototype.calculateArea = function () {
-        throw new Error('calculateArea method must be implemented in derived classes');
+        throw new Error('calculateArea method must be implemented');
     };
     return Shape;
 }());
@@ -37,6 +37,19 @@ var Circle = /** @class */ (function (_super) {
         return Math.PI * Math.pow(this.radius, 2);
     };
     return Circle;
+}(Shape));
+var Triangle = /** @class */ (function (_super) {
+    __extends(Triangle, _super);
+    function Triangle(color, base, height) {
+        var _this = _super.call(this, color, 'Triangle') || this;
+        _this.base = base;
+        _this.height = height;
+        return _this;
+    }
+    Triangle.prototype.calculateArea = function () {
+        return 0.5 * this.base * this.height;
+    };
+    return Triangle;
 }(Shape));
 var Rectangle = /** @class */ (function (_super) {
     __extends(Rectangle, _super);
@@ -56,32 +69,9 @@ var Rectangle = /** @class */ (function (_super) {
 }(Shape));
 var Square = /** @class */ (function (_super) {
     __extends(Square, _super);
+    //повністю дублює клас Rectangle тож наслідується від нього, йому доступні обидва методи класу
     function Square(color, sideLength) {
         return _super.call(this, color, 'Square', sideLength, sideLength) || this;
     }
     return Square;
 }(Rectangle));
-var Triangle = /** @class */ (function (_super) {
-    __extends(Triangle, _super);
-    function Triangle(color, base, height) {
-        var _this = _super.call(this, color, 'Triangle') || this;
-        _this.base = base;
-        _this.height = height;
-        return _this;
-    }
-    Triangle.prototype.calculateArea = function () {
-        return 0.5 * this.base * this.height;
-    };
-    return Triangle;
-}(Shape));
-// Example usage:
-// const circle = new Circle('Red', 'Circle', 5);
-// console.log(`Area of ${circle.name} (${circle.color}): ${circle.calculateArea()}`);
-// const rectangle = new Rectangle('Blue', 'Rectangle', 4, 6);
-// console.log(`Area of ${rectangle.name} (${rectangle.color}): ${rectangle.calculateArea()}`);
-// rectangle.print();
-// const square = new Square('Green', 4);
-// console.log(`Area of ${square.name} (${square.color}): ${square.calculateArea()}`);
-// square.print();
-// const triangle = new Triangle('Yellow', 3, 8);
-// console.log(`Area of ${triangle.name} (${triangle.color}): ${triangle.calculateArea()}`);
