@@ -3,10 +3,7 @@
 //У Square і Rectangle зі свого боку є ще додатковий метод print, який виводить рядок із формулою розрахунку площі.
 
 abstract class Shape {
-  protected constructor(readonly color: string, readonly name: string) {
-    this.color = color;
-    this.name = name;
-  }
+  protected constructor(readonly color: string, readonly name: string) {}
 
   abstract calculateArea(): number;
 }
