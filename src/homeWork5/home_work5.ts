@@ -28,8 +28,8 @@ class Triangle extends Shape {
   private readonly base: number;
   private readonly height: number;
 
-  constructor(color: string, base: number, height: number) {
-    super(color, 'Triangle');
+  constructor(color: string, name: string, base: number, height: number) {
+    super(color, name);
     this.base = base;
     this.height = height;
   }
@@ -76,7 +76,7 @@ class Square extends Conclusion {
 }
 
 //Example
-const square = new Triangle('black', 26, 26);
+const square = new Triangle('black', 'triangle', 26, 26);
 const methodSquare = square.calculateArea();
 console.log(methodSquare);
 
