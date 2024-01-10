@@ -20,8 +20,6 @@ var Shape = /** @class */ (function () {
     function Shape(color, name) {
         this.color = color;
         this.name = name;
-        this.color = color;
-        this.name = name;
     }
     return Shape;
 }());
@@ -46,8 +44,8 @@ var Circle = /** @class */ (function (_super) {
 }(Shape));
 var Triangle = /** @class */ (function (_super) {
     __extends(Triangle, _super);
-    function Triangle(color, base, height) {
-        var _this = _super.call(this, color, 'Triangle') || this;
+    function Triangle(color, name, base, height) {
+        var _this = _super.call(this, color, name) || this;
         _this.base = base;
         _this.height = height;
         return _this;
@@ -88,3 +86,7 @@ var Square = /** @class */ (function (_super) {
     };
     return Square;
 }(Conclusion));
+//Example
+var square = new Triangle('black', 'triangle', 26, 26);
+var methodSquare = square.calculateArea();
+console.log(methodSquare);
