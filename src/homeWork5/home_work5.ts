@@ -2,23 +2,19 @@
 // У кожної фігури є загальнодоступні властивості - колір і назва, які не можна змінювати після створення.
 //У Square і Rectangle зі свого боку є ще додатковий метод print, який виводить рядок із формулою розрахунку площі.
 
-class Shape {
-  //базовий клас який має захищенні поля та базовий метод розрахунку calculateArea().
-  protected readonly color: string;
-  protected readonly name: string;
-
-  constructor(color: string, name: string) {
+abstract class Shape {
+  protected constructor(readonly color: string, readonly name: string) {
     this.color = color;
     this.name = name;
   }
 
-  public calculateArea(): number {
-    throw new Error('calculateArea method must be implemented');
-  }
+  abstract calculateArea(): number;
 }
 
+abstract class Conclusion extends Shape {
+  abstract print(): void;
+}
 class Circle extends Shape {
-  //наслідується від базового класу Shape та маэ власне приватне поле radius
   private readonly radius: number;
 
   constructor(color: string, name: string, radius: number) {
@@ -32,7 +28,6 @@ class Circle extends Shape {
 }
 
 class Triangle extends Shape {
-  //також наслідується від базового класу Shape.
   private readonly base: number;
   private readonly height: number;
 
@@ -47,8 +42,7 @@ class Triangle extends Shape {
   }
 }
 
-class Rectangle extends Shape {
-  //також наслідується від базового классу та має власні приватні поля та додатковий власний метод print()
+class Rectangle extends Conclusion {
   private readonly width: number;
   private readonly height: number;
 
@@ -67,14 +61,25 @@ class Rectangle extends Shape {
   }
 }
 
-class Square extends Rectangle {
-  //повністю дублює клас Rectangle тож наслідується від нього, йому доступні обидва методи класу
-  constructor(color: string, sideLength: number) {
-    super(color, 'Square', sideLength, sideLength);
+class Square extends Conclusion {
+  private readonly sideLength: number;
+
+  constructor(color: string, name: string, sideLength: number) {
+    super(color, name);
+    this.sideLength = sideLength;
+  }
+
+  public calculateArea(): number {
+    return this.sideLength * 2;
+  }
+
+  public print(): void {
+    console.log(`Area of ${this.name} (${this.color}): ${this.sideLength} * 2`);
   }
 }
 
-
-
-
+//Example
+const square = new Triangle('black', 26, 26);
+const methodSquare = square.calculateArea();
+console.log(methodSquare);
 

@@ -20,12 +20,18 @@ var Shape = /** @class */ (function () {
     function Shape(color, name) {
         this.color = color;
         this.name = name;
+        this.color = color;
+        this.name = name;
     }
-    Shape.prototype.calculateArea = function () {
-        throw new Error('calculateArea method must be implemented');
-    };
     return Shape;
 }());
+var Conclusion = /** @class */ (function (_super) {
+    __extends(Conclusion, _super);
+    function Conclusion() {
+        return _super !== null && _super.apply(this, arguments) || this;
+    }
+    return Conclusion;
+}(Shape));
 var Circle = /** @class */ (function (_super) {
     __extends(Circle, _super);
     function Circle(color, name, radius) {
@@ -66,12 +72,19 @@ var Rectangle = /** @class */ (function (_super) {
         console.log("Area of ".concat(this.name, " (").concat(this.color, "): ").concat(this.width, " * ").concat(this.height));
     };
     return Rectangle;
-}(Shape));
+}(Conclusion));
 var Square = /** @class */ (function (_super) {
     __extends(Square, _super);
-    //повністю дублює клас Rectangle тож наслідується від нього, йому доступні обидва методи класу
-    function Square(color, sideLength) {
-        return _super.call(this, color, 'Square', sideLength, sideLength) || this;
+    function Square(color, name, sideLength) {
+        var _this = _super.call(this, color, name) || this;
+        _this.sideLength = sideLength;
+        return _this;
     }
+    Square.prototype.calculateArea = function () {
+        return this.sideLength * 2;
+    };
+    Square.prototype.print = function () {
+        console.log("Area of ".concat(this.name, " (").concat(this.color, "): ").concat(this.sideLength, " * 2"));
+    };
     return Square;
-}(Rectangle));
+}(Conclusion));
