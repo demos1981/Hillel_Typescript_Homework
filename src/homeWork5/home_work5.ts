@@ -13,7 +13,6 @@ abstract class Conclusion extends Shape {
 }
 class Circle extends Shape {
   private readonly radius: number;
-
   constructor(color: string, name: string, radius: number) {
     super(color, name);
     this.radius = radius;
