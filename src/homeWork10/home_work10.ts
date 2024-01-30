@@ -15,69 +15,69 @@
 
 //Вам необхідно подумати про поділ вашого коду на різні сутності, інтерфеси і типи, щоб зробити ваше рішення типобезпечним. Реалізація всіх методів не є необхідною - це за бажанням.
 
-interface Movie {
+interface IMovie {
   title: string;
   year: number;
   rating: number;
   awards: string[];
 }
 
-interface MovieCategory {
+interface IMovieCategory {
   title: string;
-  movies: Movie[];
+  movies: IMovie[];
 }
 
-interface MovieList {
-  movies: Movie[];
-  filters: MovieFilter[];
+interface IMovieList {
+  movies: IMovie[];
+  filters: IMovieFilter[];
 
   applySearchValue(searchValue: string): void;
-  applyFiltersValue(filters: MovieFilter[]): void;
+  applyFiltersValue(filters: IMovieFilter[]): void;
 }
 
-interface MovieFilter {
-  apply(data: Movie[]): Movie[];
+interface IMovieFilter {
+  apply(data: IMovie[]): IMovie[];
 }
 
-interface MatchFilter extends MovieFilter {
+interface MatchFilter extends IMovieFilter {
   filterField: string;
 }
 
-interface RangeFilter extends MovieFilter {
+interface RangeFilter extends IMovieFilter {
   filterField: string;
   filterTo: string;
 }
 
-interface SearchFilterByValues extends MovieFilter {
+interface SearchFilterByValues extends IMovieFilter {
   values: string[];
 }
 
-class ConcreteMovieList implements MovieList {
-  movies: Movie[];
-  filters: MovieFilter[] = [];
+class ConcreteMovieList implements IMovieList {
+  movies: IMovie[];
+  filters: IMovieFilter[] = [];
 
-  constructor(movies: Movie[]) {
+  constructor(movies: IMovie[]) {
     this.movies = movies;
   }
 
   applySearchValue(searchValue: string): void {}
 
-  applyFiltersValue(filters: MovieFilter[]): void {
+  applyFiltersValue(filters: IMovieFilter[]): void {
     this.filters = filters;
   }
 }
 
-const movies: Movie[] = [
+const movies: IMovie[] = [
   { title: 'Movie1', year: 2020, rating: 8, awards: ['Best Picture', 'best mini photo'] },
   { title: 'Movie2', year: 2019, rating: 7, awards: [] },
 ];
 
-const actionMoviesCategory: MovieCategory = {
+const actionMoviesCategory: IMovieCategory = {
   title: 'Action Movies',
   movies: movies,
 };
 
-const movieList: MovieList = new ConcreteMovieList(movies);
+const movieList: IMovieList = new ConcreteMovieList(movies);
 const matchFilter: MatchFilter = { filterField: 'Movie1', apply: data => data };
 const rangeFilter: RangeFilter = { filterField: 'year', filterTo: '2023', apply: data => data };
 
