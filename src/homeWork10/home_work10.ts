@@ -68,7 +68,7 @@ class ConcreteMovieList implements MovieList {
 }
 
 const movies: Movie[] = [
-  { title: 'Movie1', year: 2020, rating: 8, awards: ['Best Picture'] },
+  { title: 'Movie1', year: 2020, rating: 8, awards: ['Best Picture', 'best mini photo'] },
   { title: 'Movie2', year: 2019, rating: 7, awards: [] },
 ];
 
@@ -79,8 +79,8 @@ const actionMoviesCategory: MovieCategory = {
 
 const movieList: MovieList = new ConcreteMovieList(movies);
 const matchFilter: MatchFilter = { filterField: 'Movie1', apply: data => data };
-const rangeFilter: RangeFilter = { filterField: 'year', filterTo: '2022', apply: data => data };
+const rangeFilter: RangeFilter = { filterField: 'year', filterTo: '2023', apply: data => data };
 
 movieList.applyFiltersValue([matchFilter, rangeFilter]);
 
-console.log(movieList);
+
