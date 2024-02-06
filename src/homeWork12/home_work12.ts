@@ -72,28 +72,28 @@ function Email(target: any, propertyKey: string | symbol, descriptor: PropertyDe
 
 class ExperimentalClass {
   @DeprecatedMethod('Use the newMethod instead.', 'newMethod')
-  public oldMethod() {
+  variantMethod() {
     console.log('This is the old method.');
   }
 
   @MinLength(5)
-  validateLength(value: string) {
+  checkingLength(value: string) {
     console.log(`Value '${value}' meets the minimum length requirement.`);
   }
 
   @MaxLength(10)
-  validateMaxLength(value: string) {
+  checkingMaxLength(value: string) {
     console.log(`Value '${value}' meets the maximum length requirement.`);
   }
 
   @Email
-  validateEmail(email: string) {
+  checkingEmail(email: string) {
     console.log(`Email '${email}' is valid.`);
   }
 }
-
+//Перевіримо підставляючи данні в методи
 const exampleInstance = new ExperimentalClass();
-exampleInstance.oldMethod();
-exampleInstance.validateLength('Hello');
-exampleInstance.validateMaxLength('ShortText');
-exampleInstance.validateEmail('test@example.com');
+exampleInstance.variantMethod();
+exampleInstance.checkingLength('Hello');
+exampleInstance.checkingMaxLength('ShortText');
+exampleInstance.checkingEmail('test@example.com');
