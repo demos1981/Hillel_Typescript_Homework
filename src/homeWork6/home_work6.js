@@ -1,3 +1,4 @@
+"use strict";
 //https://www.sharooq.com/what-is-index-signature-key-string-any-type-in-typescript
 var user = {
     key1: 1,

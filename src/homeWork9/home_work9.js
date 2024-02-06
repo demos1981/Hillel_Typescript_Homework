@@ -1,3 +1,4 @@
+"use strict";
 function exampleFunction1() {
     return 'Hello';
 }

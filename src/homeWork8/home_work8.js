@@ -1,3 +1,4 @@
+"use strict";
 var readOnlyExamples = {
     prop1: 'read-only string',
     prop2: {
