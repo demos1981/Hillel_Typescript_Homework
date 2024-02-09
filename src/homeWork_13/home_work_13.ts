@@ -55,7 +55,7 @@ class TodoList {
   }
 
   getAllNotes(): INote[] {
-    return [...this.notes]; // Return copy to avoid mutation
+    return [...this.notes]; 
   }
 
   markCompleted(id: string): void {
