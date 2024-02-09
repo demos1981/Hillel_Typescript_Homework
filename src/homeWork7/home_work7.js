@@ -1,3 +1,4 @@
+"use strict";
 //1-Напишіть узагальнену функцію filterArray(array, condition), яка фільтрує масив елементів на основі наданої умови.
 function filterArray(array, condition) {
     return array.filter(function (element) { return condition(element); });

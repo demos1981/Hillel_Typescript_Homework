@@ -1,3 +1,4 @@
+"use strict";
 //задание1
 function calculate(calculator, operation, number) {
     switch (operation) {

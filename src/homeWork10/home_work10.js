@@ -1,3 +1,4 @@
+"use strict";
 //У вас є дві сутності - список фільмів і список категорій фільмів.
 var ConcreteMovieList = /** @class */ (function () {
     function ConcreteMovieList(movies) {
