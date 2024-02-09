@@ -14,6 +14,7 @@ class TodoList {
   public notes: INote[] = [];
 
   addNote(name: string, content: string, confirmationRequired: boolean = false): void {
+    //додавання нотатків
     if (!name || !content) {
       throw new Error('Note name and content cannot be empty!');
     }
@@ -30,6 +31,7 @@ class TodoList {
   }
 
   deleteNote(id: string): void {
+    //видалення нотатків
     const index = this.notes.findIndex(note => note.id === id);
     if (index !== -1) {
       this.notes.splice(index, 1);
@@ -37,6 +39,7 @@ class TodoList {
   }
 
   editNote(id: string, name?: string, content?: string): void {
+    //редагування нотатків
     const index = this.notes.findIndex(note => note.id === id);
     if (index !== -1) {
       const note = this.notes[index];
@@ -55,7 +58,7 @@ class TodoList {
   }
 
   getAllNotes(): INote[] {
-    return [...this.notes]; 
+    return [...this.notes];
   }
 
   markCompleted(id: string): void {
