@@ -8,7 +8,7 @@
   ],
   "compilerOptions": {
     /* Visit https://aka.ms/tsconfig to read more about this file */
-    //"target": "es2015",
+    "target": "es2015",
     //"experimentalDecorators": true,
     /* Projects */
     // "incremental": true,                              /* Save .tsbuildinfo files to allow for incremental compilation of projects. */
@@ -19,7 +19,7 @@
     // "disableReferencedProjectLoad": true,             /* Reduce the number of projects loaded automatically by TypeScript. */
 
     /* Language and Environment */
-    "target": "esnext" /* Set the JavaScript language version for emitted JavaScript and include compatible library declarations. */,
+    //"target": "esnext" /* Set the JavaScript language version for emitted JavaScript and include compatible library declarations. */,
     "lib": [
       "ESNext.Array",
       "DOM",
