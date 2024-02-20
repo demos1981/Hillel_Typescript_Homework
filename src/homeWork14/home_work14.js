@@ -109,7 +109,6 @@ var AvtoRegistration = /** @class */ (function () {
     }
     AvtoRegistration.prototype.addAccount = function (client) {
         var account = new Client(client.firstName, client.lastName, client.years);
-        //this.accounts[client.accountNumber] = account;
         console.log(account);
     };
     AvtoRegistration.prototype.addCars = function (car) {
