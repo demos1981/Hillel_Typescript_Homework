@@ -100,60 +100,48 @@ class IssueOfNumbers{
 
 }
 
-class AvtoRegistration{
-//  protected readonly accounts!:Record<number,Client>;
-//  protected readonly cars!:Record<number,Car>;
-protected car:Car;
-protected client:Client;
-protected takeDokument:TakeDokument;
-protected carInspection:CarInspection;
-protected issueOfNumbers:IssueOfNumbers;
+class AvtoRegistration {
+  protected car: Car;
+  protected client: Client;
+  protected takeDokument: TakeDokument;
+  protected carInspection: CarInspection;
+  protected issueOfNumbers: IssueOfNumbers;
 
-constructor(car?:Car,client?:Client,takeDokument?:TakeDokument,carInspection?:CarInspection,issueOfNumbers?:IssueOfNumbers){
+  constructor(
+    car?: Car,
+    client?: Client,
+    takeDokument?: TakeDokument,
+    carInspection?: CarInspection,
+    issueOfNumbers?: IssueOfNumbers
+  ) {
     this.takeDokument = takeDokument || new TakeDokument();
     this.carInspection = carInspection || new CarInspection();
-    this.issueOfNumbers = issueOfNumbers ||new IssueOfNumbers();
-    this.client = client || new Client('first','last',1975,);
-    this.car = car ||new Car('carBrend','carColor',1991);
+    this.issueOfNumbers = issueOfNumbers || new IssueOfNumbers();
+    this.client = client || new Client('first', 'last', 1975);
+    this.car = car || new Car('carBrend', 'carColor', 1991);
+  }
 
+  public addAccount(client: Client): void {
+    const account = new Client(client.firstName, client.lastName, client.years);
 
-    
-}
-
-public addAccount(client:Client):void{
-    const account = new Client(
-        
-            client.firstName,
-            client.lastName,
-            client.years,
-        
-    );
-  
-     //this.accounts[client.accountNumber] = account;
     console.log(account);
-    
-}
-public addCars(car:Car):void{
-    const carItem = new Car(
-        car.carBrand,
-        car.carColor,
-        car.carYear
-    )
-console.log(carItem);
-}
+  }
+  public addCars(car: Car): void {
+    const carItem = new Car(car.carBrand, car.carColor, car.carYear);
+    console.log(carItem);
+  }
 
-public operatinRegistration():string{
+  public operatinRegistration(): string {
     let result = 'Your registration is: Started\n ';
     result += this.takeDokument.takeDoks(this.client);
     result += this.carInspection.inspectCar(this.car);
-    result += this.issueOfNumbers.ganarateCarNumber()
+    result += this.issueOfNumbers.ganarateCarNumber();
     result += 'In what state is the autonomer currently\n';
     result += this.issueOfNumbers.getCarNumber();
     result += this.addAccount(this.client);
     result += this.addCars(this.car);
     return result;
-}
-
+  }
 }
 
 
