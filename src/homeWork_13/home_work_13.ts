@@ -4,11 +4,16 @@ interface INote {
   name: string;
   content: string;
   createdAt: Date;
-  editedAt: Date;
+  editedAt: Date | null;
   status: 'completed' | 'pending';
   confirmationRequired: boolean;
 }
-
+//два типи нотатків
+enum EnumNote {
+  defaultNote,
+  mustToProveNote,
+}
+type CheckNote = keyof typeof EnumNote;
 class TodoList {
   //імпліментація класу який создає, редагує та видаляє нотатки а ще сортирує за конкретними значеннями
   public notes: INote[] = [];
@@ -38,7 +43,13 @@ class TodoList {
     }
   }
 
-  editNote(id: string, name?: string, content?: string): void {
+  editNote(key: CheckNote, id: string, name?: string, content?: string): void {
+    const checkNoteItem = EnumNote[key];
+    if (checkNoteItem <= EnumNote.defaultNote) {
+      console.log('it is default note');
+    } else {
+      console.log('you must choose');
+    }
     //редагування нотатків
     const index = this.notes.findIndex(note => note.id === id);
     if (index !== -1) {
@@ -100,6 +111,8 @@ class TodoList {
 const todoList = new TodoList();
 todoList.addNote('Buy groceries', 'Milk, bread, eggs');
 todoList.addNote('Finish project', 'Write unit tests', true);
+todoList.editNote('defaultNote', 'some id', 'My new todo', 'it is my new todo list item');
+
 todoList.markCompleted(todoList.notes[0].id);
 console.log(todoList.getAllNotes());
 
