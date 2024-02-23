@@ -30,17 +30,43 @@ USD = 'USD',
 GBP = 'GBP',
 UAH = 'UAH',
 }
+
+type CurrencyRate = Record<CurrencyTypeEnum,number>;
 interface ICurrencyConversionStrategy {
     convert(amount:number,currency:CurrencyTypeEnum):number;
 
 }
-
-interface IBank{
-
-      openBankAccount():void;
-      closeBankAccount():void;
+//інтерфейс або абстрактний клас, що визначає метод execute() для виконання дії.
+interface IBankCommand {
+  execute(): void;
 }
+interface IAccount{
+    ownerName:IBankClient;
+    balance:number;
+    currency:CurrencyTypeEnum;
+}
+// interface IBank{
 
+//       openBankAccount():void;
+//       closeBankAccount():void;
+// }
+
+
+class CurrentRateConversionStrategy implements ICurrencyConversionStrategy{
+    private readonly exchangeRates: CurrencyRate;
+    constructor(exchangeRates:CurrencyRate){
+        this.exchangeRates = exchangeRate;
+    }
+
+     convert(amount:number,currency:CurrencyTypeEnum):number{
+         const rate = this.exchangeRates[currency];
+           if(!rate) throw new Error(`Exchange rate not available for currency ${currency}`);
+           return amount * rate;
+     }
+   
+
+
+}
 abstract class Observable implements IObservable {
   private readonly observers: IObserver[] = [];
 
@@ -78,25 +104,12 @@ abstract class Observable implements IObservable {
     }
   }
 }
-class Bank implements IBank{
-    private static instance: Bank;
-    private constructor(){}
-    public static getInstance():Bank{
-        if(!Bank.instance){
-            Bank.instance = new Bank();
-        }
-        return Bank.instance;
-    }
- public openBankAccount():void{}
- public closeBankAccount():void{}
 
- 
-}
 
 class BankAccount extends Observable {
   private readonly currency: string;
   private readonly number: number;
-  private balance = 1000;
+  protected balance = 5000;
   private _holderName!: string;
   private _conversionStrategy!: ICurrencyConversionStrategy;
 
@@ -199,10 +212,37 @@ class PushNotification implements IObserver {
   }
 }
 
-//інтерфейс або абстрактний клас, що визначає метод execute() для виконання дії.
-interface IBankCommand {
-  execute(): void;
+class Bank{
+    private static instance: Bank;
+    private accounts:IAccount[]=[];
+    private constructor(){}
+    public static getInstance():Bank{
+        if(!Bank.instance){
+            Bank.instance = new Bank();
+        }
+        return Bank.instance;
+    }
+ public openBankAccount(ownerName:IBankClient,balance:number, currency:CurrencyTypeEnum):number{
+    const newAccount = { ownerName, balance: 2000, currency };
+    this.accounts.push(newAccount);
+    return this.accounts.length - 1;
+ }
+ public closeBankAccount(accountIndex: number): void {
+    if (accountIndex < 0 || accountIndex >= this.accounts.length) {
+      throw new Error(`Invalid account index: ${accountIndex}`);
+    }
+    this.accounts.splice(accountIndex, 1);
+    console.log(`this account is closer`);
+ }
+  public getAccountDetails(accountIndex: number): IAccount | undefined {
+    if (accountIndex < 0 || accountIndex >= this.accounts.length) {
+      return undefined;
+    }
+    return this.accounts[accountIndex];
+  }
+ 
 }
+
 //Конкретні команди: реалізації команди, які інкапсулюють певні дії (наприклад, TurnOnLightCommand, OpenFileCommand).
 class BankOperationRepeate implements IBankCommand {
     
@@ -250,20 +290,33 @@ class Invoker {
 }
 
 // Usage example
+const exchangeRate = {[CurrencyTypeEnum.EUR]:1.1, [CurrencyTypeEnum.GBP]:1.3,[CurrencyTypeEnum.USD]:1.0,[CurrencyTypeEnum.UAH]:38,};
+const currentStrategy = new CurrentRateConversionStrategy(exchangeRate);
+const accountCurrentRate = new BankAccount({firstName:'Evgeniy',lastName:'Dukhno'},CurrencyTypeEnum.EUR,currentStrategy);
+console.log(accountCurrentRate);
+accountCurrentRate.makeTransaction(250,CurrencyTypeEnum.GBP);
+
+
+const bank = Bank.getInstance();
+const firstAccount = bank.openBankAccount({firstName:'Veronica',lastName:'Gavrilova'},4000,CurrencyTypeEnum.EUR,);
+const secondAccount = bank.openBankAccount({firstName:'Vitaliy',lastName:'Vorobyov'},3000,CurrencyTypeEnum.GBP,);
+const showAccounts = bank.getAccountDetails(firstAccount);
+console.log(showAccounts);
+bank.closeBankAccount(0);
+
 const receiver = new Receiver();
 const commandA = new BankOperationRepeate(receiver);
 const commandB = new BankOperationClose(receiver);
+
+
+
+
 
 const invoker = new Invoker();
 invoker.addCommand(commandA);
 invoker.addCommand(commandB);
 
 invoker.executeCommands();
-
-
-
-
-
 
 function clientCode() {
     const bank1 = Bank.getInstance();
