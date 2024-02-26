@@ -1,15 +1,4 @@
 
-
-//Клас може реалізувати інтерфейс або псевдонім типу, і те, і інше точно таким же чином. 
-//Однак зауважте, що клас та інтерфейс вважаються статичними структурами. Як ви думаєте, на що це впливає? 
-//Створіть класи, котрі будуть реалізовувати в одному випадку інтерфейси, а в іншому псевдонім типу. 
-//Наприкінці, спробуйте вимусити клас реалізувати  псевдонім типу, який іменує тип об’єднання.
-//На відміну від псевдоніма типу, інтерфейс можна визначати кілька разів і розглядатиметься як єдиний інтерфейс (з об’єднаними членами всіх декларацій). 
-//Продемонструйте цю властивість інтерфейсів у своєму рішенні.
-//Сподіваюсь це завдання буде для вас як нагадування різниць можливостей між Interface та Type alias. 
-//Але варто памʼятати, що у них різна ідеє використання не зважаючи на те, що технічні можливості доволі схожі.
-
-
 //Створіть інтерфейс з декількома властивостями. Відтворіть ту саму структуру завдяки Type alias.
 //інтерфейс та тайп єліас з з властивостями
 interface IFirstInterface {
@@ -44,6 +33,8 @@ type BooleanTypeAlias = boolean;
 //також можемо відмітити використання generic в тайп еліасах
 type GenericTypeAlias<T> = T;
 
+let gen:GenericTypeAlias<string> = 'String';
+console.log(gen);
 //перевірка
 
 let bool:BooleanTypeAlias = true;
@@ -197,3 +188,105 @@ const id:IdType = {
 }
 
 userId(id);
+
+//Клас може реалізувати інтерфейс або псевдонім типу, і те, і інше точно таким же чином. 
+//Однак зауважте, що клас та інтерфейс вважаються статичними структурами. Як ви думаєте, на що це впливає? 
+//Створіть класи, котрі будуть реалізовувати в одному випадку інтерфейси, а в іншому псевдонім типу. 
+//Наприкінці, спробуйте вимусити клас реалізувати  псевдонім типу, який іменує тип об’єднання.
+
+interface IWorker {
+  name: string;
+  age: number;
+  makeAge(): void;
+}
+
+//реалізація з інтерфейсом
+class Recruting implements IWorker {
+  name: string;
+  age: number;
+
+  constructor(name: string, age: number) {
+    this.name = name;
+    this.age = age;
+  }
+
+  makeAge(): void {
+    console.log(`Name:${this.name},Make age: ${this.age}`);
+  }
+}
+
+
+const recruting = new Recruting("Sam", 35);
+recruting.makeAge(); 
+
+
+//реалізація з псевдонимом типу
+type CompanyType = {
+  name: string;
+  age: number;
+  profession: string;
+
+
+}
+
+
+class User implements CompanyType{
+  name:string;
+  age: number;
+  profession:string;
+
+  constructor(name:string, age:number,  profession:string) {
+    this.name = name;
+    this.age = age;
+    this.profession = profession;
+  }
+
+}
+
+const firm = new User('Stanislav',35,'Builder');
+console.log(firm);
+//union type
+type UnionType = string|number;
+
+class UnionRealization {
+    payload:UnionType;
+
+    constructor(payload:UnionType){
+        this.payload = payload;
+    }
+ 
+}
+
+const unionString = new UnionRealization('Never mind');
+console.log(unionString);
+
+
+//На відміну від псевдоніма типу, інтерфейс можна визначати кілька разів і розглядатиметься як єдиний інтерфейс (з об’єднаними членами всіх декларацій). 
+//Продемонструйте цю властивість інтерфейсів у своєму рішенні.
+
+interface IBuilder{
+    name:string;
+    age:number;
+}
+interface IBuilder{
+    profession:string;
+    usingBuilder():void;
+}
+
+class Builder implements IBuilder{
+    name:string;
+    age:number;
+    profession:string;
+    constructor(name:string,age:number,profession:string){
+        this.name = name;
+        this.age = age;
+        this.profession = profession;
+    }
+
+    usingBuilder(){
+        console.log(`This ${this.name} use profession ${this.profession}`)
+    }
+}
+
+const builders = new Builder('Troy',34,'Full worker');
+builders.usingBuilder();
