@@ -21,22 +21,22 @@ var CashRegister = /** @class */ (function () {
         this.closingTime = closingTime;
         this.visitor = [];
         this.customer = [];
+        this.amountTicket = 0;
     }
     CashRegister.prototype.sellTickets = function (tickets) {
-        var amountTicket = 0;
         if (tickets.type = 'adult') {
-            amountTicket += tickets.value;
+            this.amountTicket += tickets.value;
         }
         else if (tickets.type = 'child') {
-            amountTicket += tickets.value;
+            this.amountTicket += tickets.value;
         }
         else if (tickets.type = 'family') {
-            amountTicket += tickets.value;
+            this.amountTicket += tickets.value;
         }
         else {
             console.log('No tickets sold');
         }
-        console.log("Tickets sold for the amount ".concat(amountTicket));
+        console.log("Tickets sold for the amount $".concat(this.amountTicket));
     };
     CashRegister.prototype.addPeople = function (visitor) {
         this.visitor.push(visitor);
@@ -97,6 +97,7 @@ var Accountings = /** @class */ (function () {
         this.budgetAll = 0;
         this.animalExpenses = 0;
         this.employeeExpenses = 0;
+        this.zooMaintenance = 0;
         this.budgetAll = budget;
     }
     Accountings.prototype.addExpenseForAnimal = function (amount) {
@@ -107,13 +108,18 @@ var Accountings = /** @class */ (function () {
         this.employeeExpenses += amount;
         console.log("Expense of ".concat(amount, " added for employee payment."));
     };
+    Accountings.prototype.addForZooMaimnenance = function (amount) {
+        this.zooMaintenance += amount;
+        console.log("Was spent on maintenance of the zoo");
+    };
     Accountings.prototype.generateFinancialReports = function () {
         console.log("Financial Report:");
         console.log("Total animal care expenses: $".concat(this.animalExpenses));
         console.log("Total employee payment expenses: $".concat(this.employeeExpenses));
-        var totalExpenses = this.animalExpenses + this.employeeExpenses;
+        console.log("Total maintenance of the zoo $".concat(this.zooMaintenance));
+        var totalExpenses = this.animalExpenses + this.employeeExpenses + this.zooMaintenance;
         console.log("Total expenses: $".concat(totalExpenses));
-        var remainingBudget = "".concat(this.budgetAll, " - $").concat(totalExpenses);
+        var remainingBudget = this.budgetAll - totalExpenses;
         console.log("Remaining budget: $".concat(remainingBudget));
     };
     return Accountings;
@@ -170,8 +176,8 @@ var tickets = {
 };
 cashRegister.sellTickets(tickets);
 var visitor = {
-    name: "John Doe",
-    contactData: "john@example.com"
+    name: 'Albert Fitch',
+    contactData: 'john@example.com'
 };
 cashRegister.addPeople(visitor);
 cashRegister.notificationBeforeLeaving();
@@ -195,6 +201,7 @@ var initialBudget = 100000;
 var accounting = new Accountings(initialBudget);
 accounting.addExpenseForAnimal(10000);
 accounting.addExpenseForEmployee(8000);
+accounting.addForZooMaimnenance(9000);
 accounting.generateFinancialReports();
 //--Administration
 var admin = new Administration();

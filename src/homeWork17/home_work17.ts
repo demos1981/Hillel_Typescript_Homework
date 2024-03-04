@@ -107,27 +107,28 @@ interface ITickets{
 class CashRegister {
     private visitor:IVisitors[] = [];
     private customer:ICustomer[] = [];
+    protected amountTicket:number = 0;
   
     constructor(private closingTime: Date) {
        
     }
 
     sellTickets(tickets:{type:string,value:number}):void{
-      let amountTicket = 0;
+     
       if (tickets.type = 'adult'){
-        amountTicket += tickets.value;
+        this.amountTicket += tickets.value;
         
       }else if(tickets.type = 'child'){
-        amountTicket += tickets.value;
+        this.amountTicket += tickets.value;
        
         
       }else if(tickets.type = 'family'){
-        amountTicket += tickets.value;
+        this.amountTicket += tickets.value;
       
       }else{
         console.log('No tickets sold');
       }
-      console.log(`Tickets sold for the amount ${amountTicket}`);
+      console.log(`Tickets sold for the amount $${this.amountTicket}`);
   
  
     }
@@ -194,6 +195,7 @@ class Accountings{
     private budgetAll:number = 0;
     private animalExpenses:number = 0;
     private employeeExpenses:number = 0;
+    private zooMaintenance:number = 0;
 
     constructor(budget:number){
         this.budgetAll = budget;
@@ -205,19 +207,27 @@ class Accountings{
     }
       
     addExpenseForEmployee(amount: number):void {
-    this.employeeExpenses += amount;
-    console.log(`Expense of ${amount} added for employee payment.`);
-  }
+        this.employeeExpenses += amount;
+        console.log(`Expense of ${amount} added for employee payment.`);
+    }
+    
+    addForZooMaimnenance(amount:number):void{
+        this.zooMaintenance += amount;
+        console.log(`Was spent on maintenance of the zoo`)
+
+    }
+
   
     generateFinancialReports():void {
     console.log("Financial Report:");
     console.log(`Total animal care expenses: $${this.animalExpenses}`);
     console.log(`Total employee payment expenses: $${this.employeeExpenses}`);
-    const totalExpenses = this.animalExpenses + this.employeeExpenses;
+    console.log(`Total maintenance of the zoo $${this.zooMaintenance}`)
+    const totalExpenses = this.animalExpenses + this.employeeExpenses + this.zooMaintenance;
     console.log(`Total expenses: $${totalExpenses}`);
-    const remainingBudget = `${this.budgetAll} - $${totalExpenses}`;
+    const remainingBudget = this.budgetAll - totalExpenses;
     console.log(`Remaining budget: $${remainingBudget}`);
-  }
+    }
 
 }
 
@@ -265,7 +275,6 @@ const closingTime = new Date();
 closingTime.setHours(23,0,0,0);
 
 
-
 const cashRegister = new CashRegister(closingTime);
 const tickets:ITickets = {
     type:'adult',
@@ -276,8 +285,8 @@ const tickets:ITickets = {
  cashRegister.sellTickets(tickets);
 
  const visitor: IVisitors = {
-  name: "John Doe",
-  contactData: "john@example.com"
+  name: 'Albert Fitch',
+  contactData: 'john@example.com'
 };
 
 cashRegister.addPeople(visitor);
@@ -308,6 +317,7 @@ const initialBudget = 100000;
 const accounting = new Accountings(initialBudget);
 accounting.addExpenseForAnimal(10000);
 accounting.addExpenseForEmployee(8000);
+accounting.addForZooMaimnenance(9000);
 accounting.generateFinancialReports();
 
 //--Administration
