@@ -453,16 +453,13 @@ const newAnimals:IAnimals = {
     health:'Ok',
 };
 admin.addAnimals(newAnimals);
-
+admin.deleteEmployes('Jack');
+admin.deleteAnimals('Samson');
 
 const promo = 'Subscribe to us on social networks @zoo.instagram.com';
 admin.promoCreating(promo);
 const events = 'Parrot exhibition from 10.08 to 20.08 from 10-00 to 18-00';
 admin.eventsCreating(events);
-
-
-admin.deleteEmployes('Jack');
-admin.deleteAnimals('Samson');
 
 
 const closingTime = new Date();
