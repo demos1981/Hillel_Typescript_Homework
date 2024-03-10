@@ -94,41 +94,180 @@ interface ITickets{
     type:'adult' | 'child' | 'family';
     value:number;
 }
+//Интерфейс издателя объявляет набор методов для управлениями подписчиками
+interface ISubject {
+    // Присоединяет наблюдателя к издателю.
+    attach(observer: IObserver): void;
 
-// interface IBudget{
-//     budgetAll:number,
+    // Отсоединяет наблюдателя от издателя.
+    detach(observer: IObserver): void;
+
+    // Уведомляет всех наблюдателей о событии.
+    notify(): void;
+}
+
+
+//Интерфейс Наблюдателя объявляет метод уведомления, который издатели используют для оповещения своих подписчиков.
+interface IObserver {
+    // Получить обновление от субъекта.
+    update(subject: ISubject): void;
+}
+
+abstract class BusinessLogicController implements ISubject {
+
+    protected observers: IObserver[] = [];
+    
+    //   constructor(private closingTime: Date) {
+       
+    // }
    
-// }
+    public attach(observer: IObserver): void {
+        const isExist = this.observers.includes(observer);
+        if (isExist) {
+            return console.log('Subject: Observer has been attached already.');
+        }
+        this.observers.push(observer);
+    }
+
+    public detach(observer: IObserver): void {
+        const observerIndex = this.observers.indexOf(observer);
+        if (observerIndex === -1) {
+            return console.log('Subject: Nonexistent observer.');
+        }
+
+        this.observers.splice(observerIndex, 1);
+    }
+
+    /**
+     * Запуск обновления в каждом подписчике.
+     */
+    public notify(): void {
+        for (const observer of this.observers) {
+            observer.update(this);
+        }
+    }
+    
+ 
+   
+}
+class ReminderController extends BusinessLogicController{
+  
+    public stateNumber!:number;
 
 
-// interface Receipt{
+        constructor(private closingTime: Date) {
+       super();
+    }
+  
+    public someNotification(): void {
+       const currentTime = new Date();
+       const timeDiff = this.closingTime.getTime() - currentTime.getTime();
+       this.stateNumber = Math.floor(timeDiff / (1000 * 60));
+       this.notify();
+    }
 
-// }
+   
+}
+class MarketingControllerEvent extends BusinessLogicController{
+   
+     public stateEvent!:string;
+
+     private event:string;
+  
+
+          constructor(event:string) {
+       super();
+       this.event = event;
+     
+    }
+
+
+
+    public eventsNewsletter(): void {
+      this.stateEvent = this.event;
+       this.notify();
+    }
+
+}
+
+class MarketingControllerPromo extends BusinessLogicController{
+   
+     public statePromo!:string;
+
+     private promo:string;
+  
+
+          constructor(promo:string) {
+       super();
+       this.promo = promo;
+     
+    }
+
+ 
+    
+
+    public promoNewsletter(): void {
+      this.statePromo = this.promo;
+       this.notify();
+    }
+
+}
+
+class NotificationBeforeClosing implements IObserver {
+    public update(subject: ISubject): void {
+        if (subject instanceof ReminderController && subject.stateNumber <= 15 && subject.stateNumber >=0 ) {
+            console.log("Zoo is may closing soon. Please make your way to the exit.");
+        }
+    }
+}
+
+class NotificationBeforeLeaving implements IObserver {
+    public update(subject: ISubject): void {
+        
+        if (subject instanceof ReminderController && subject.stateNumber == 0 ) {
+           console.log("Thank you for visiting the zoo. We hope you had a great time!");
+        }
+    }
+}
+
+class NewsletterEvents implements IObserver{
+    public update(subject:ISubject):void{
+          if (subject instanceof MarketingControllerEvent && subject.stateEvent ) {
+           console.log(subject.stateEvent);
+        }
+    }
+}
+
+class NewsletterPromo implements IObserver{
+    public update(subject:ISubject):void{
+          if (subject instanceof MarketingControllerPromo && subject.statePromo ) {
+           console.log(subject.statePromo);
+        }
+    }
+}
+
 class CashRegister {
     private visitor:IVisitors[] = [];
     private customer:ICustomer[] = [];
     protected amountTicket:number = 0;
   
-    constructor(private closingTime: Date) {
+    // constructor(private closingTime: Date) {
        
-    }
+    // }
 
     sellTickets(tickets:{type:string,value:number}):void{
      
-      if (tickets.type = 'adult'){
-        this.amountTicket += tickets.value;
-        
-      }else if(tickets.type = 'child'){
-        this.amountTicket += tickets.value;
-       
-        
-      }else if(tickets.type = 'family'){
-        this.amountTicket += tickets.value;
-      
-      }else{
-        console.log('No tickets sold');
-      }
+          switch (tickets.type) {
+    case 'adult':
+    case 'child':
+    case 'family':
+      this.amountTicket += tickets.value;
       console.log(`Tickets sold for the amount $${this.amountTicket}`);
+      break;
+    default:
+      console.log('No tickets sold');
+      break;
+  }
   
  
     }
@@ -139,43 +278,24 @@ class CashRegister {
         console.log(visitor);
        
     }
-  
-    notificationBeforeClosing():void{
-    const currentTime = new Date();
-    const timeDiff = this.closingTime.getTime() - currentTime.getTime();
-    const minutesUntilClosing = Math.floor(timeDiff / (1000 * 60));
-   
-    if (minutesUntilClosing <= 15) {
-      console.log("Zoo is may closing soon. Please make your way to the exit.");
-    }
-    }
 
-    notificationBeforeLeaving():void{
-    const currentTime = new Date();
-    const timeDiff = this.closingTime.getTime() - currentTime.getTime();
-    const minutesUntilClosing = Math.floor(timeDiff / (1000 * 60));
-    if (minutesUntilClosing <= 0) {
-      console.log("Thank you for visiting the zoo. We hope you had a great time!");
-    }
-   
-    }
 }
-class MarketingDepartments{
-    constructor(private customerList:ICustomer[]){}
-    sandPromo(customers: ICustomer[]):void{
-        this.customerList.forEach(customers =>{
-            console.log(`Sending promotion to ${customers.name} at ${customers.contactData}`)
-        })
-        console.log('Promotion sent succesfully.');
-    }
+// class MarketingDepartments{
+//     constructor(private customerList:ICustomer[]){}
+//     sandPromo(customers: ICustomer[]):void{
+//         this.customerList.forEach(customers =>{
+//             console.log(`Sending promotion to ${customers.name} at ${customers.contactData}`)
+//         })
+//         console.log('Promotion sent succesfully.');
+//     }
 
-    sendNews(news: string):void {
-        this.customerList.forEach(customer => {
-            console.log(`Sending news to ${customer.name} at ${customer.contactData}: ${news}`);
-    });
-    console.log("News sent successfully.");
-  }
-}
+//     sendNews(news: string):void {
+//         this.customerList.forEach(customer => {
+//             console.log(`Sending news to ${customer.name} at ${customer.contactData}: ${news}`);
+//     });
+//     console.log("News sent successfully.");
+//   }
+// }
 
 class Reporting {
     private dailyReport:number = 0;
@@ -260,22 +380,21 @@ class Administration{
             console.log(`Animal ${animalsName} not found.`)
         }
     }
-    promoNotification(promo:string):void{
-        console.log(`Subscribe to us on social networks ${promo}`);
+    promoCreating(promo:string):void{
+        console.log('Promo creating');
     }
-    eventsNotification(events:string){
-        console.log(`Come to us at ${events}`);
+    eventsCreating(events:string):void{
+        console.log('Event creating');
     }
 }
 
 
-//Перевірка
+/**
+ * Клиентский код.
+ */
 //--CashRegister
-const closingTime = new Date();
-closingTime.setHours(23,0,0,0);
 
-
-const cashRegister = new CashRegister(closingTime);
+ const cashRegister = new CashRegister();
 const tickets:ITickets = {
     type:'adult',
     value:30,
@@ -292,20 +411,15 @@ const tickets:ITickets = {
 cashRegister.addPeople(visitor);
 
 
-cashRegister.notificationBeforeLeaving();
-cashRegister.notificationBeforeClosing();
+// cashRegister.notificationBeforeLeaving();
+
 
 
 const customer:ICustomer[] = [
     {name:'Valeriya',contactData:'valeriya@gmail.com'},
     {name:'Sergey',contactData:'andreev@gmail.com'}
 ];
-//--MArketing Department
-const marketingDepartment = new MarketingDepartments(customer);
-marketingDepartment.sandPromo(customer);
 
-const news = 'New exhibit opened next weekend!';
-marketingDepartment.sendNews(news);
 //--Reports
 const reports = new Reporting();
 const ticketSales = 200;
@@ -336,12 +450,55 @@ const newAnimals:IAnimals = {
     health:'Ok',
 };
 admin.addAnimals(newAnimals);
-const promo = '@zoo.instagram.com'
-admin.promoNotification(promo);
-const events = 'Parrot exhibition from 10.08 to 20.08 from 10-00 to 18-00'
-admin.eventsNotification(events);
+
+
+const promo = 'Subscribe to us on social networks @zoo.instagram.com';
+admin.promoCreating(promo);
+const events = 'Parrot exhibition from 10.08 to 20.08 from 10-00 to 18-00';
+admin.eventsCreating(events);
+
+
 admin.deleteEmployes('Jack');
 admin.deleteAnimals('Samson');
+
+
+const closingTime = new Date();
+closingTime.setHours(18,0,0,0);
+const subject = new ReminderController(closingTime);
+
+const beforeClosing = new NotificationBeforeClosing();
+subject.attach(beforeClosing);
+subject.someNotification();
+subject.detach(beforeClosing);
+
+const beforeLeaving = new NotificationBeforeLeaving();
+subject.attach(beforeLeaving);
+subject.someNotification();
+subject.detach(beforeLeaving);
+
+
+const eventNews = events;
+const eventsNew = new MarketingControllerEvent(eventNews);
+const newsletterEvent = new NewsletterEvents();
+eventsNew.attach(newsletterEvent);
+eventsNew.eventsNewsletter();
+eventsNew.detach(newsletterEvent);
+
+const promoNews = promo;
+const promoNew = new MarketingControllerPromo(promoNews);
+const newsletterPromo = new NewsletterPromo();
+promoNew.attach(newsletterPromo);
+promoNew.promoNewsletter();
+eventsNew.detach(newsletterPromo);
+
+
+
+
+
+
+
+
+subject.detach(beforeLeaving);
 
 
 
