@@ -245,29 +245,49 @@ class NewsletterPromo implements IObserver{
         }
     }
 }
+class TicketManager{
+    private availableTickets:{[type:string]:number}={
+        adult:10,
+        child:3,
+        family:4
+    };
 
+    sellTicketsControls(tickets:ITickets[]):void{
+        for(const ticket of tickets){
+            if(this.availableTickets[ticket.type]>0){
+                this.availableTickets[ticket.type]--;
+                console.log(`Ticket sold ${ticket.type}`);
+            }else {
+                console.log(`Ticket ${ticket.type}are sold out `);
+            }
+        }
+    }
+}
 class CashRegister {
     private visitor:IVisitors[] = [];
     private customer:ICustomer[] = [];
+    private ticketManager:TicketManager = new TicketManager();
     protected amountTicket:number = 0;
   
-    // constructor(private closingTime: Date) {
-       
-    // }
 
-    sellTickets(tickets:{type:string,value:number}):void{
+
+    sellTickets(tickets:ITickets[]):void{
+        this.ticketManager.sellTicketsControls(tickets);
+        this.amountTicket+=tickets.reduce((total,ticket)=>total + ticket.value,0);
+        console.log(`Total amount collected:$${this.amountTicket}`);
+
      
-          switch (tickets.type) {
-    case 'adult':
-    case 'child':
-    case 'family':
-      this.amountTicket += tickets.value;
-      console.log(`Tickets sold for the amount $${this.amountTicket}`);
-      break;
-    default:
-      console.log('No tickets sold');
-      break;
-  }
+//           switch (tickets.type) {
+//     case 'adult':
+//     case 'child':
+//     case 'family':
+//       this.amountTicket += tickets.value;
+//       console.log(`Tickets sold for the amount $${this.amountTicket}`);
+//       break;
+//     default:
+//       console.log('No tickets sold');
+//       break;
+//   }
   
  
     }
@@ -280,22 +300,7 @@ class CashRegister {
     }
 
 }
-// class MarketingDepartments{
-//     constructor(private customerList:ICustomer[]){}
-//     sandPromo(customers: ICustomer[]):void{
-//         this.customerList.forEach(customers =>{
-//             console.log(`Sending promotion to ${customers.name} at ${customers.contactData}`)
-//         })
-//         console.log('Promotion sent succesfully.');
-//     }
 
-//     sendNews(news: string):void {
-//         this.customerList.forEach(customer => {
-//             console.log(`Sending news to ${customer.name} at ${customer.contactData}: ${news}`);
-//     });
-//     console.log("News sent successfully.");
-//   }
-// }
 
 class Reporting {
     private dailyReport:number = 0;
@@ -390,16 +395,17 @@ class Administration{
 
 
 /**
- * Клиентский код.
+ * Клієнтський код.
  */
 //--CashRegister
 
 const cashRegister = new CashRegister();
-const tickets:ITickets = {
-    type:'adult',
-    value:30,
-
-}
+const tickets:ITickets[] = [
+    {type:'adult',value:10},
+    {type:'family',value:4},
+    {type:'child',value:3},
+    {type:'child',value:3}
+]
 
  cashRegister.sellTickets(tickets);
 
@@ -409,7 +415,6 @@ const tickets:ITickets = {
 };
 
 cashRegister.addPeople(visitor);
-
 
 
 
