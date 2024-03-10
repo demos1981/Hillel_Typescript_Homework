@@ -394,7 +394,7 @@ class Administration{
  */
 //--CashRegister
 
- const cashRegister = new CashRegister();
+const cashRegister = new CashRegister();
 const tickets:ITickets = {
     type:'adult',
     value:30,
@@ -410,8 +410,6 @@ const tickets:ITickets = {
 
 cashRegister.addPeople(visitor);
 
-
-// cashRegister.notificationBeforeLeaving();
 
 
 
@@ -498,7 +496,7 @@ eventsNew.detach(newsletterPromo);
 
 
 
-subject.detach(beforeLeaving);
+
 
 
 
