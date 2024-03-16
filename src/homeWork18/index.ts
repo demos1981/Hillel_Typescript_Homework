@@ -1,46 +1,36 @@
-import { IVisitors,ITickets,ICustomer,IEmployees,IAnimals,IObserver,ISubject } from "./InterfacesAndTypeAlias";
-import { CashRegister } from "./CashRegister";
-import { Reporting } from "./Reporting";
-import { Accountings } from "./Accounting";
-import { Administration } from "./Administration";
-import { ReminderController } from "./ReminderController";
-import { NotificationBeforeClosing } from "./NotificationClosing";
-import { NotificationBeforeLeaving } from "./NotificationLeaving";
-import { MarketingControllerPromo } from "./MarketingPromo";
-import { MarketingControllerEvent } from "./MarcetingEvents";
-import { NewsletterEvents } from "./NewsletterEvents";
-import { NewsletterPromo } from "./NewsletterPromo";
-
-
-
-
-
-
-
-
+import { IVisitors, ITickets, ICustomer, IEmployees, IAnimals, IObserver, ISubject } from './InterfacesAndTypeAlias';
+import { CashRegister } from './CashRegister';
+import { Reporting } from './Reporting';
+import { Accountings } from './Accounting';
+import { Administration } from './Administration';
+import { ReminderController } from './ReminderController';
+import { NotificationBeforeClosing } from './NotificationClosing';
+import { NotificationBeforeLeaving } from './NotificationLeaving';
+import { MarketingControllerPromo } from './MarketingPromo';
+import { MarketingControllerEvent } from './MarcetingEvents';
+import { NewsletterEvents } from './NewsletterEvents';
+import { NewsletterPromo } from './NewsletterPromo';
 
 const cashRegister = new CashRegister();
-const tickets:ITickets[] = [
-    {type:'adult',value:10},
-    {type:'family',value:4},
-    {type:'child',value:3},
-    {type:'child',value:3}
-]
+const tickets: ITickets[] = [
+  { type: 'adult', value: 10 },
+  { type: 'family', value: 4 },
+  { type: 'child', value: 3 },
+  { type: 'child', value: 3 },
+];
 
- cashRegister.sellTickets(tickets);
+cashRegister.sellTickets(tickets);
 
- const visitor: IVisitors = {
+const visitor: IVisitors = {
   name: 'Albert Fitch',
-  contactData: 'john@example.com'
+  contactData: 'john@example.com',
 };
 
 cashRegister.addPeople(visitor);
 
-
-
-const customer:ICustomer[] = [
-    {name:'Valeriya',contactData:'valeriya@gmail.com'},
-    {name:'Sergey',contactData:'andreev@gmail.com'}
+const customer: ICustomer[] = [
+  { name: 'Valeriya', contactData: 'valeriya@gmail.com' },
+  { name: 'Sergey', contactData: 'andreev@gmail.com' },
 ];
 
 //--Reports
@@ -51,26 +41,34 @@ reports.transferingToAccounting();
 
 //--Accounting
 const initialBudget = 100000;
-const accounting = new Accountings(initialBudget);
-accounting.addExpenseForAnimal(10000);
-accounting.addExpenseForEmployee(8000);
-accounting.addForZooMaimnenance(9000);
+const initialAnimalExpenses = 10000;
+const initialEmployeeExpenses = 5000;
+const initialZooMaintenance = 9000;
+const accounting = new Accountings(
+  initialBudget,
+  initialAnimalExpenses,
+  initialEmployeeExpenses,
+  initialZooMaintenance
+);
+accounting.addExpenseForAnimal(initialAnimalExpenses);
+accounting.addExpenseForEmployee(initialEmployeeExpenses);
+accounting.addForZooMaimnenance(initialZooMaintenance);
 accounting.generateFinancialReports();
 
 //--Administration
 const admin = new Administration();
-const newEmployee:IEmployees = {
-    name:'Jack',
-    age:35,
-    position:'Security',
+const newEmployee: IEmployees = {
+  name: 'Jack',
+  age: 35,
+  position: 'Security',
 };
 admin.addEmployes(newEmployee);
 
-const newAnimals:IAnimals = {
-    kind:'Lion',
-    name:'Samson',
-    age:6,
-    health:'Ok',
+const newAnimals: IAnimals = {
+  kind: 'Lion',
+  name: 'Samson',
+  age: 6,
+  health: 'Ok',
 };
 admin.addAnimals(newAnimals);
 admin.deleteEmployes('Jack');
@@ -81,9 +79,8 @@ admin.promoCreating(promo);
 const events = 'Parrot exhibition from 10.08 to 20.08 from 10-00 to 18-00';
 admin.eventsCreating(events);
 
-
 const closingTime = new Date();
-closingTime.setHours(18,0,0,0);
+closingTime.setHours(18, 0, 0, 0);
 const subject = new ReminderController(closingTime);
 
 const beforeClosing = new NotificationBeforeClosing();
@@ -95,7 +92,6 @@ const beforeLeaving = new NotificationBeforeLeaving();
 subject.attach(beforeLeaving);
 subject.someNotification();
 subject.detach(beforeLeaving);
-
 
 const eventNews = events;
 const eventsNew = new MarketingControllerEvent(eventNews);

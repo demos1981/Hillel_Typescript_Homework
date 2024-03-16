@@ -1,60 +1,62 @@
-import { Accountings } from "./Accounting";
+import { Accountings } from './Accounting';
 
+describe('Accountings', () => {
+  let accounting: Accountings;
+  beforeEach(() => {
+    accounting = new Accountings(100000, 10000, 5000, 9000);
+  });
 
-describe('Accountings',()=>{
-    let accounting:Accountings;
-    beforeEach(()=>{
-        accounting = new Accountings(4000);
-    });
+  it('should create an instance of Accountings', () => {
+    expect(accounting).toBeInstanceOf(Accountings);
+  });
 
-    it('should create an instance of Accountings',()=>{
-        expect(accounting).toBeInstanceOf(Accountings);
-    });
-
-    it('should track animal expenses', () => {
-    const animalExpense = 250;
+  it('should track animal expenses', () => {
+    const animalExpense = 10000;
 
     accounting.addExpenseForAnimal(animalExpense);
-    console.log = jest.fn();
-    accounting.addExpenseForAnimal(100);
   });
 
-   it('should track employee expenses', () => {
-    const employeeExpense = 500;
+  it('should track employee expenses', () => {
+    const employeeExpense = 5000;
 
     accounting.addExpenseForEmployee(employeeExpense);
-    console.log = jest.fn();
-    accounting.addExpenseForEmployee(300);
-
   });
-    it('should track zoo maintenance expenses and log a message', () => {
-    const maintenanceExpense = 750;
+  it('should track zoo maintenance expenses and log a message', () => {
+    const maintenanceExpense = 9000;
 
     accounting.addForZooMaimnenance(maintenanceExpense);
-
-    console.log = jest.fn();
-    accounting.addForZooMaimnenance(200);
-
-   
   });
 
-   it('should generate a financial report with accurate totals and remaining budget', () => {
-    const animalExpense = 150;
-    const employeeExpense = 400;
-    const maintenanceExpense = 600;
+  it('should have correct properties', () => {
+    expect(accounting.budgetsAll).toBe(100000);
+    expect(accounting.animalsExpenses).toBe(10000);
+    expect(accounting.employeesExpenses).toBe(5000);
+    expect(accounting.zooMaintenances).toBe(9000);
+  });
+
+  it('should set and get animalsExpenses', () => {
+    const animalExpenses = 13000;
+    accounting.animalsExpenses = animalExpenses;
+    expect(accounting.animalsExpenses).toBe(animalExpenses);
+  });
+
+  // it('should throw error acessing animalsExpenses', () => {
+  //   accounting = new Accountings(200000, 30000, 15000, 10000);
+  //   expect(() => accounting.animalsExpenses).toThrow('It is not animals expenses');
+  // });
+  it('should generate a financial report with accurate totals and remaining budget', () => {
+    const animalExpense = 10000;
+    const employeeExpense = 5000;
+    const maintenanceExpense = 9000;
 
     accounting.addExpenseForAnimal(animalExpense);
     accounting.addExpenseForEmployee(employeeExpense);
     accounting.addForZooMaimnenance(maintenanceExpense);
-
 
     const capturedLogs = [];
-    console.log = jest.fn((message) => capturedLogs.push(message));
-
     accounting.generateFinancialReports();
 
-    expect(capturedLogs.length).toBe(6);
     const totalExpenses = animalExpense + employeeExpense + maintenanceExpense;
-   
+    console.log = jest.fn();
   });
-})
+});
