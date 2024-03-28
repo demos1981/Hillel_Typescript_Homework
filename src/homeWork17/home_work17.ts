@@ -68,34 +68,34 @@
 //Бухгалтерія розпоряджається бюджетом і стежить за фінансами зоопарку.
 
 //Можливість вести бюджетний облік і надавати фінансові звіти.
-interface IEmployees{
+export interface IEmployees{
     name:string;
     age:number;
     position:string;
 
 }
 
-interface IAnimals{
+export interface IAnimals{
     kind:string;
     name:string;
     age:number;
     health:string;
 }
 
-interface IVisitors{
+export interface IVisitors{
     name:string;
     contactData:string;
 }
 
-interface ICustomer extends IVisitors{}
+export interface ICustomer extends IVisitors{}
 
 
-interface ITickets{
+export interface ITickets{
     type:'adult' | 'child' | 'family';
     value:number;
 }
 //Интерфейс издателя объявляет набор методов для управлениями подписчиками
-interface ISubject {
+export interface ISubject {
     // Присоединяет наблюдателя к издателю.
     attach(observer: IObserver): void;
 
@@ -108,12 +108,12 @@ interface ISubject {
 
 
 //Интерфейс Наблюдателя объявляет метод уведомления, который издатели используют для оповещения своих подписчиков.
-interface IObserver {
+export interface IObserver {
     // Получить обновление от субъекта.
     update(subject: ISubject): void;
 }
 
-abstract class BusinessLogicController implements ISubject {
+export abstract class BusinessLogicController implements ISubject {
 
     protected observers: IObserver[] = [];
     
@@ -150,7 +150,7 @@ abstract class BusinessLogicController implements ISubject {
  
    
 }
-class ReminderController extends BusinessLogicController{
+export class ReminderController extends BusinessLogicController{
   
     public stateNumber!:number;
 
@@ -168,7 +168,7 @@ class ReminderController extends BusinessLogicController{
 
    
 }
-class MarketingControllerEvent extends BusinessLogicController{
+export class MarketingControllerEvent extends BusinessLogicController{
    
      public stateEvent!:string;
 
@@ -190,7 +190,7 @@ class MarketingControllerEvent extends BusinessLogicController{
 
 }
 
-class MarketingControllerPromo extends BusinessLogicController{
+export class MarketingControllerPromo extends BusinessLogicController{
    
      public statePromo!:string;
 
@@ -213,7 +213,7 @@ class MarketingControllerPromo extends BusinessLogicController{
 
 }
 
-class NotificationBeforeClosing implements IObserver {
+export class NotificationBeforeClosing implements IObserver {
     public update(subject: ISubject): void {
         if (subject instanceof ReminderController && subject.stateNumber <= 15 && subject.stateNumber >=0 ) {
             console.log("Zoo is may closing soon. Please make your way to the exit.");
@@ -221,7 +221,7 @@ class NotificationBeforeClosing implements IObserver {
     }
 }
 
-class NotificationBeforeLeaving implements IObserver {
+export class NotificationBeforeLeaving implements IObserver {
     public update(subject: ISubject): void {
         
         if (subject instanceof ReminderController && subject.stateNumber == 0 ) {
@@ -230,7 +230,7 @@ class NotificationBeforeLeaving implements IObserver {
     }
 }
 
-class NewsletterEvents implements IObserver{
+export class NewsletterEvents implements IObserver{
     public update(subject:ISubject):void{
           if (subject instanceof MarketingControllerEvent && subject.stateEvent ) {
            console.log(subject.stateEvent);
@@ -238,21 +238,21 @@ class NewsletterEvents implements IObserver{
     }
 }
 
-class NewsletterPromo implements IObserver{
+export class NewsletterPromo implements IObserver{
     public update(subject:ISubject):void{
           if (subject instanceof MarketingControllerPromo && subject.statePromo ) {
            console.log(subject.statePromo);
         }
     }
 }
-class TicketManager{
+export class TicketManager{
     private availableTickets:{[type:string]:number}={
         adult:10,
         child:3,
         family:4
     };
 
-    sellTicketsControls(tickets:ITickets[]):void{
+    public sellTicketsControls(tickets:ITickets[]):void{
         for(const ticket of tickets){
             if(this.availableTickets[ticket.type]>0){
                 this.availableTickets[ticket.type]--;
@@ -263,7 +263,7 @@ class TicketManager{
         }
     }
 }
-class CashRegister {
+export class CashRegister {
     private visitor:IVisitors[] = [];
     private customer:ICustomer[] = [];
     private ticketManager:TicketManager = new TicketManager();
@@ -271,7 +271,7 @@ class CashRegister {
   
 
 
-    sellTickets(tickets:ITickets[]):void{
+    public sellTickets(tickets:ITickets[]):void{
         this.ticketManager.sellTicketsControls(tickets);
         this.amountTicket+=tickets.reduce((total,ticket)=>total + ticket.value,0);
         console.log(`Total amount collected:$${this.amountTicket}`);
@@ -291,7 +291,7 @@ class CashRegister {
   
  
     }
-    addPeople(visitor:IVisitors):void{
+    public addPeople(visitor:IVisitors):void{
          
         this.visitor.push(visitor);
         this.customer.push({...visitor});
@@ -302,21 +302,21 @@ class CashRegister {
 }
 
 
-class Reporting {
+export class Reporting {
     private dailyReport:number = 0;
 
-    collectingDataRevenue(revenue:number):void{
+   public collectingDataRevenue(revenue:number):void{
         this.dailyReport += revenue;
         console.log(`Report collected ${revenue}`);
     }
 
-    transferingToAccounting():void{
+   public transferingToAccounting():void{
         console.log(`Transferring daily revenue to Accounting:${this.dailyReport}`);
     }
 
 }
 
-class Accountings{
+export class Accountings{
     private budgetAll:number = 0;
     private animalExpenses:number = 0;
     private employeeExpenses:number = 0;
@@ -326,24 +326,24 @@ class Accountings{
         this.budgetAll = budget;
     }
 
-    addExpenseForAnimal(amount:number):void{
+   public addExpenseForAnimal(amount:number):void{
         this.animalExpenses += amount;
         console.log(`Expenses of ${amount} added for employee payment`);
     }
       
-    addExpenseForEmployee(amount: number):void {
+   public addExpenseForEmployee(amount: number):void {
         this.employeeExpenses += amount;
         console.log(`Expense of ${amount} added for employee payment.`);
     }
     
-    addForZooMaimnenance(amount:number):void{
+   public addForZooMaimnenance(amount:number):void{
         this.zooMaintenance += amount;
         console.log(`Was spent on maintenance of the zoo`)
 
     }
 
   
-    generateFinancialReports():void {
+   public generateFinancialReports():void {
     console.log("Financial Report:");
     console.log(`Total animal care expenses: $${this.animalExpenses}`);
     console.log(`Total employee payment expenses: $${this.employeeExpenses}`);
@@ -356,14 +356,16 @@ class Accountings{
 
 }
 
-class Administration{
+export class Administration{
     private employes:IEmployees[] = [];
     private animals:IAnimals[] = [];
-    addEmployes(employes:IEmployees):void{
+
+
+   public addEmployes(employes:IEmployees):void{
         this.employes.push(employes);
         console.log(`New employe ${employes.name} added`);
     }
-    deleteEmployes(employesName:string):void{
+  public deleteEmployes(employesName:string):void{
         const index = this.employes.findIndex(employee=>employee.name === employesName);
         if(index !==-1){
             const deleteEmployes = this.employes.splice(index,1)[0];
@@ -372,11 +374,11 @@ class Administration{
             console.log(`Employes ${employesName} not found`);
         }
     }
-    addAnimals(animals:IAnimals):void{
+   public addAnimals(animals:IAnimals):void{
         this.animals.push(animals);
         console.log(`Animal ${animals.name} added succesfully.`);
     }
-    deleteAnimals(animalsName:string):void{
+   public deleteAnimals(animalsName:string):void{
         const index = this.animals.findIndex(animals=>animals.name === animalsName);
         if(index !== -1){
             const deleteAnimals =this.animals.splice(index, 1)[0];
@@ -385,10 +387,10 @@ class Administration{
             console.log(`Animal ${animalsName} not found.`)
         }
     }
-    promoCreating(promo:string):void{
+  public  promoCreating(promo:string):void{
         console.log('Promo creating');
     }
-    eventsCreating(events:string):void{
+   public eventsCreating(events:string):void{
         console.log('Event creating');
     }
 }
